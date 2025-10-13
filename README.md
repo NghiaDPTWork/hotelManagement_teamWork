@@ -1,4 +1,4 @@
-﻿# hotelManagement-workTeam
+﻿# hotelManagement-teamWork
 
 Quy tắc làm việc với Git (`Git Flow`). Đây là một `git flow` cơ bản, tùy dự án sẽ có một số `branch` khác phục vụ những môi trường khác nhau như `release-qc` cho tester test, `release-beta` cho người dùng test.
 
