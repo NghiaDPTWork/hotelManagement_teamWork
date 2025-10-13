@@ -1,4 +1,4 @@
-package edu.hotel_management.infrastructure.controller;
+package edu.hotel_management.presentation.controller;
 
 import edu.hotel_management.application.service.GuestService;
 import edu.hotel_management.application.service.StaffService;
