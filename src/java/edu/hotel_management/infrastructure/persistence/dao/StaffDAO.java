@@ -26,13 +26,13 @@ public class StaffDAO extends BaseDAO<Staff> {
 
     // ========= TRIỂN KHAI ÁNH XẠ TỪ RESULTSET SANG OBJECT =========
     @Override
-    public Staff mapRowtoObject(ResultSet rs) throws SQLException {
+    public Staff mapRow(ResultSet rs) throws SQLException {
         return new Staff(
                 rs.getInt("StaffID"),
                 rs.getString("FullName"),
                 StaffRole.valueFromDb(rs.getString("Role")),
                 rs.getString("UserName"),
-                rs.getString("PasswordHash"),
+                rs.getString("Password"),
                 rs.getString("Phone"),
                 rs.getString("Email")
         );
