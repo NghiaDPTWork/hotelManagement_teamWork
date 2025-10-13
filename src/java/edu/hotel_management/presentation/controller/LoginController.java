@@ -6,6 +6,7 @@ import edu.hotel_management.infrastructure.persistence.dao.GuestDAO;
 import edu.hotel_management.infrastructure.persistence.dao.StaffDAO;
 import edu.hotel_management.infrastructure.persistence.provider.DataSourceProvider;
 import edu.hotel_management.presentation.constants.IConstant;
+import edu.hotel_management.presentation.constants.Path;
 import edu.hotel_management.presentation.constants.RequestAttribute;
 import edu.hotel_management.presentation.constants.SessionAttribute;
 import edu.hotel_management.presentation.dto.guest.GuestPresentationModel;
@@ -60,13 +61,13 @@ public class LoginController extends HttpServlet {
 
                 String userRole = "";
                 if (currentUser instanceof StaffPresentationModel) {
-                    userRole = ((StaffPresentationModel) currentUser).getRole();
+                    userRole = ((StaffPresentationModel) currentUser).getRole().toUpperCase();
                 } else if (currentUser instanceof GuestPresentationModel) {
                     userRole = "GUEST";
                 }
 
                 String redirectUrl = IConstant.PAGE_HOME;
-                switch (userRole.toUpperCase()) {
+                switch (userRole) {
                     case "ADMIN":
                         redirectUrl = "/admin/dashboard"; 
                         break;
@@ -75,6 +76,9 @@ public class LoginController extends HttpServlet {
                         break;
                     case "GUEST":
                         redirectUrl = IConstant.PAGE_HOME;
+                        break;
+                    case "SERVICESTAFF":
+                        redirectUrl = Path.SERVICE_STAFF_DASHBOARD_PATH;
                         break;
                 }
                 response.sendRedirect(request.getContextPath() + redirectUrl);
