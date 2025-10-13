@@ -34,8 +34,8 @@ public interface IConstant {
     public static final String PAGE_MANAGER = "";
 
     //========== CÁC TRANG CHUC NANG CHÍNH ==========
-    public static final String PAGE_LOGIN = "/WEB-INF/views/features/login/login.jsp";
-    public static final String PAGE_SIGN_UP = "/WEB-INF/views/features/login/sign-up.jsp";
+    public static final String PAGE_LOGIN = "/WEB-INF/views/features/auth/login.jsp";
+    public static final String PAGE_SIGN_UP = "/WEB-INF/views/features/auth/sign-up.jsp";
     public static final String PAGE_ROOM_BOOKING = "/WEB-INF/views/features/booking/viewRoomsBooking.jsp";
 
 }

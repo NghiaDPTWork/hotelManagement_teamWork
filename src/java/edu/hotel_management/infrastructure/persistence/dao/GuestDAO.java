@@ -22,22 +22,20 @@ public class GuestDAO extends BaseDAO<Guest> {
 
     // ========= TRIỂN KHAI ÁNH XẠ TỪ RESULTSET SANG OBJECT =========
     @Override
-    public Guest mapRowtoObject(ResultSet rs) throws SQLException {
+    public Guest mapRow(ResultSet rs) throws SQLException {
         Guest guest = new Guest();
         guest.setGuestId(rs.getInt("GuestID"));
         guest.setFullName(rs.getString("FullName"));
-        guest.setUsername(rs.getString("UserName"));
-        guest.setPassword(rs.getString("Password"));
         guest.setPhone(rs.getString("Phone"));
         guest.setEmail(rs.getString("Email"));
         guest.setAddress(rs.getString("Address"));
         guest.setIdNumber(rs.getString("IDNumber"));
-        
-        java.sql.Date dob = rs.getDate("DateOfBirth");
+        Date dob = rs.getDate("DateOfBirth");
+        guest.setUsername(rs.getString("UserName"));
+        guest.setPassword(rs.getString("Password"));
         if (dob != null) {
             guest.setDateOfBirth(dob.toLocalDate());
         }
-        
         return guest;
     }
 
@@ -59,8 +57,8 @@ public class GuestDAO extends BaseDAO<Guest> {
     }
     
     // ========= TÌM GUEST THEO IDNUMBER =========
-    public Optional<Guest> findByIdNumber(String IdNumber) {
-        List<Guest> guests = query("SELECT * FROM GUEST WHERE IdNumber = ?", IdNumber);
+    public Optional<Guest> findByIdNumber(String idNumber) {
+        List<Guest> guests = query("SELECT * FROM GUEST WHERE IdNumber = ?", idNumber);
         return guests.stream().findFirst();
     }
 
