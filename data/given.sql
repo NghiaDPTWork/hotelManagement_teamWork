@@ -225,18 +225,18 @@ CREATE INDEX IX_BookingService_Status_Date ON BOOKING_SERVICE(Status, ServiceDat
 -- STAFF (Insert trước vì các bảng khác reference)
 INSERT INTO STAFF (FullName, Role, Username, Password, Phone, Email)
 VALUES
-(N'Nguyễn Dương Thuận', 'Admin', 'admin', '123', '0901234567', 'admin@hotel.com'),
-(N'Trần Thị Hoa', 'Manager', 'manager', '111', '0907654321', 'manager@hotel.com'),
-(N'Lê Quốc Huy', 'Receptionist', 'recept', '123', '0911111111', 'recept@hotel.com'),
-(N'Phạm Thị Mai', 'Housekeeping', 'house', '123', '0922222222', 'house@hotel.com'),
-(N'Đặng Văn Bình', 'ServiceStaff', 'service', '123', '0933333333', 'service@hotel.com');
+(N'Nguyễn Dương Thuận', 'Admin', 'admin', '$2a$10$KAJCJxARy9cpqnSCFrwNSOvIujUx7ROyk9ndG6FKeF0TJlCD8H9O.', '0901234567', 'admin@hotel.com'),
+(N'Trần Thị Hoa', 'Manager', 'manager', '$2a$10$KAJCJxARy9cpqnSCFrwNSOvIujUx7ROyk9ndG6FKeF0TJlCD8H9O.', '0907654321', 'manager@hotel.com'),
+(N'Lê Quốc Huy', 'Receptionist', 'recept', '$2a$10$KAJCJxARy9cpqnSCFrwNSOvIujUx7ROyk9ndG6FKeF0TJlCD8H9O.', '0911111111', 'recept@hotel.com'),
+(N'Phạm Thị Mai', 'Housekeeping', 'house', '$2a$10$KAJCJxARy9cpqnSCFrwNSOvIujUx7ROyk9ndG6FKeF0TJlCD8H9O.', '0922222222', 'house@hotel.com'),
+(N'Đặng Văn Bình', 'ServiceStaff', 'service', '$2a$10$KAJCJxARy9cpqnSCFrwNSOvIujUx7ROyk9ndG6FKeF0TJlCD8H9O.', '0933333333', 'service@hotel.com');
 
 -- GUEST
 INSERT INTO GUEST (FullName, Phone, Email, Address, IDNumber, DateOfBirth, Username, Password)
 VALUES
-(N'Lê Minh Tuấn', '0988888881', 'tuan@gmail.com', N'Gia Lai', '0123456789', '1990-05-10', 'tuan', '123'),
-(N'Lê Thị Hồng', '0988888882', 'hong@gmail.com', N'Đà Nẵng', '9876543210', '1995-02-14', 'hong', '123'),
-(N'Trần Quốc Bảo', '0988888883', 'bao@gmail.com', N'TP.HCM', '4567891230', '1987-11-22', 'bao', '123');
+(N'Lê Minh Tuấn', '0988888881', 'tuan@gmail.com', N'Gia Lai', '0123456789', '1990-05-10', 'tuan', '$2a$10$KAJCJxARy9cpqnSCFrwNSOvIujUx7ROyk9ndG6FKeF0TJlCD8H9O.'),
+(N'Lê Thị Hồng', '0988888882', 'hong@gmail.com', N'Đà Nẵng', '9876543210', '1995-02-14', 'hong', '$2a$10$KAJCJxARy9cpqnSCFrwNSOvIujUx7ROyk9ndG6FKeF0TJlCD8H9O.'),
+(N'Trần Quốc Bảo', '0988888883', 'bao@gmail.com', N'TP.HCM', '4567891230', '1987-11-22', 'bao', '$2a$10$KAJCJxARy9cpqnSCFrwNSOvIujUx7ROyk9ndG6FKeF0TJlCD8H9O.');
 
 -- ROOM_TYPE
 INSERT INTO ROOM_TYPE (TypeName, Capacity, PricePerNight)
@@ -265,13 +265,13 @@ VALUES
 -- TAX_CONFIG
 INSERT INTO TAX_CONFIG (TaxName, TaxRate, Description, EffectiveFrom, CreatedBy)
 VALUES
-(N'VAT', 10.00, N'Thuế giá trị gia tăng 10%', '2025-01-01', 1);
+(N'VAT', 10.00, N'Value added tax 10%', '2025-01-01', 1);
 
 -- BOOKING
 INSERT INTO BOOKING (GuestID, RoomID, CheckInDate, CheckOutDate, Status, TotalGuests, SpecialRequests, PaymentStatus)
 VALUES
-(1, 1, '2025-10-08', '2025-10-10', 'Checked-in', 1, N'Gần cửa sổ', 'Deposit Paid'),
-(2, 2, '2025-10-09', '2025-10-12', 'Reserved', 2, N'Cần thêm gối', 'Pending'),
+(1, 1, '2025-10-08', '2025-10-10', 'Checked-in', 1, N'Near the window', 'Deposit Paid'),
+(2, 2, '2025-10-09', '2025-10-12', 'Reserved', 2, N'Need more pillows', 'Pending'),
 (3, 3, '2025-10-05', '2025-10-07', 'Checked-out', 1, NULL, 'Paid');
 
 -- BOOKING_SERVICE
@@ -303,7 +303,7 @@ VALUES
 -- MAINTENANCE_ISSUE
 INSERT INTO MAINTENANCE_ISSUE (RoomID, ReportedByStaffID, IssueDescription, Status, ResolvedByStaffID, ResolutionDate)
 VALUES
-(2, 4, N'Máy lạnh không hoạt động', 'Resolved', 2, '2025-10-08'),
-(4, 2, N'Cửa phòng bị kẹt', 'Reported', NULL, NULL);
+(2, 4, N'The air conditioner is not working', 'Resolved', 2, '2025-10-08'),
+(4, 2, N'The door is stuck', 'Reported', NULL, NULL);
 
 GO
