@@ -1,0 +1,122 @@
+package edu.hotel_management.presentation.controller;
+
+import edu.hotel_management.application.service.BookingService;
+import edu.hotel_management.application.service.BookingServiceUsageService;
+import edu.hotel_management.application.service.ServiceEntityService;
+import edu.hotel_management.domain.dto.booking.BookingDetailViewModel;
+import edu.hotel_management.domain.dto.booking_service.BookingServiceCreateModel;
+import edu.hotel_management.domain.dto.booking_service.BookingServiceViewModel;
+import edu.hotel_management.domain.dto.service.ServiceViewModel;
+import edu.hotel_management.infrastructure.persistence.dao.BookingDAO;
+import edu.hotel_management.infrastructure.persistence.dao.BookingDetailDAO;
+import edu.hotel_management.infrastructure.persistence.dao.BookingServiceDAO;
+import edu.hotel_management.infrastructure.persistence.dao.ServiceDAO;
+import edu.hotel_management.infrastructure.persistence.provider.DataSourceProvider;
+import edu.hotel_management.presentation.constants.Page;
+import edu.hotel_management.presentation.constants.RequestAttribute;
+import edu.hotel_management.presentation.constants.SessionAttribute;
+import edu.hotel_management.presentation.dto.staff.StaffPresentationModel;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import javax.sql.DataSource;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ *
+ * @author thuannd.dev
+ */
+@WebServlet(name = "AddServiceController", urlPatterns = {"/service-staff/add-service"})
+public class AddServiceController extends HttpServlet {
+
+    private static final long serialVersionUID = 1L;
+    private ServiceEntityService serviceEntityService;
+    private BookingService bookingService;
+    private BookingServiceUsageService bookingServiceUsageService;
+
+
+    @Override
+    public void init() {
+        ServiceDAO serviceDao;
+        BookingDAO bookingDao;
+        BookingDetailDAO bookingDetailDao;
+        BookingServiceDAO bookingServiceDao;
+        DataSource ds = DataSourceProvider.getDataSource();
+        serviceDao = new ServiceDAO(ds);
+        bookingDao = new BookingDAO(ds);
+        bookingDetailDao = new BookingDetailDAO(ds);
+        bookingServiceDao = new BookingServiceDAO(ds);
+        this.serviceEntityService = new ServiceEntityService(serviceDao);
+        this.bookingService = new BookingService(bookingDao, bookingDetailDao);
+        this.bookingServiceUsageService = new BookingServiceUsageService(bookingServiceDao);
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            int bookingId = Integer.parseInt(request.getParameter("bookingId"));
+            BookingDetailViewModel booking = bookingService.getCheckInBookingDetailById(bookingId);
+            if (booking == null) {
+                throw new IllegalArgumentException("Invalid bookingId");
+            }
+            List<ServiceViewModel> services = serviceEntityService.getAllServices();
+
+            request.setAttribute(RequestAttribute.BOOKING, booking);
+            request.setAttribute(RequestAttribute.SERVICES, services);
+            request.getRequestDispatcher(Page.ADD_SERVICE_PAGE).forward(request, response);
+        } catch (NumberFormatException e) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid bookingId");
+        }catch (IllegalArgumentException e) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+        }
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            HttpSession session = request.getSession();
+            int bookingId = Integer.parseInt(request.getParameter("bookingId"));
+            String[] serviceIds = request.getParameterValues("serviceId[]");
+            StaffPresentationModel staff = (StaffPresentationModel) session.getAttribute(SessionAttribute.USER);
+            if (staff == null) {
+                throw new IllegalArgumentException("Invalid user");
+            }
+            if (serviceIds == null || serviceIds.length == 0) {
+                throw new IllegalArgumentException("No service selected");
+            }
+            List<BookingServiceCreateModel> createModels = new ArrayList<>();
+            for (String serviceIdStr : serviceIds) {
+                int serviceId = Integer.parseInt(serviceIdStr);
+                String quantityStr = request.getParameter("quantity_" + serviceId);
+                int quantity = 1;
+                if (quantityStr != null) {
+                    quantity = Integer.parseInt(quantityStr);
+                }
+                createModels.add(new BookingServiceCreateModel(
+                        bookingId,
+                        serviceId,
+                        quantity,
+                        staff.getStaffId()
+                ));
+            }
+            List<BookingServiceViewModel> viewModels =  bookingServiceUsageService.createBatchBookingService(createModels);
+            if (viewModels == null || viewModels.isEmpty()) {
+                throw new IllegalArgumentException("Failed to create booking service");
+            }
+            response.sendRedirect("record-service?success=true");
+        } catch (NumberFormatException e) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid input: bookingId, serviceId, or quantity");
+        }catch (IllegalArgumentException e) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+        }
+    }
+
+}
