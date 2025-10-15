@@ -3,7 +3,6 @@ package edu.hotel_management.domain.dto.booking_service;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -19,16 +18,9 @@ public class BookingServiceUsageDetailViewModel implements Serializable {
     private static final long serialVersionUID = 1L;
     private int bookingServiceId;
     private int bookingId;
-    private int guestId;
-    private String guestFullName;
-    private String guestPhone;
-    private String guestEmail;
-    private String guestIdNumber;
-    private int roomId;
-    private String roomNumber;
-    private String bookingStatus;
     private int serviceId;
     private String serviceName;
+    private String serviceType;
     private LocalDate serviceDate;
     private String bookingServiceStatus;
     private int assignedStaffId;

@@ -1,10 +1,12 @@
 package edu.hotel_management.application.service;
 
 import edu.hotel_management.domain.dto.booking_service.BookingServiceCreateModel;
+import edu.hotel_management.domain.dto.booking_service.BookingServiceUsageDetailViewModel;
 import edu.hotel_management.domain.dto.booking_service.BookingServiceViewModel;
 import edu.hotel_management.domain.entities.enums.BookingServiceStatus;
 import edu.hotel_management.infrastructure.persistence.dao.BookingServiceDAO;
 import edu.hotel_management.domain.entities.BookingService;
+import edu.hotel_management.infrastructure.persistence.dao.BookingServiceUsageDetailDAO;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -16,9 +18,11 @@ import java.util.stream.Collectors;
 public class BookingServiceUsageService {
 
     private final BookingServiceDAO bookingServiceDao;
+    private final BookingServiceUsageDetailDAO bookingServiceUsageDetailDao;
 
-    public BookingServiceUsageService(BookingServiceDAO bookingServiceDao) {
+    public BookingServiceUsageService(BookingServiceDAO bookingServiceDao, BookingServiceUsageDetailDAO bookingServiceUsageDetailDao) {
         this.bookingServiceDao = bookingServiceDao;
+        this.bookingServiceUsageDetailDao = bookingServiceUsageDetailDao;
     }
 
     public BookingServiceViewModel getBookingServiceById(int id) {
@@ -38,15 +42,18 @@ public class BookingServiceUsageService {
         }
     }
 
-    public List<BookingServiceViewModel> createBatchBookingService(List<BookingServiceCreateModel> models) {
+    public List<BookingServiceUsageDetailViewModel> createBatchBookingService(List<BookingServiceCreateModel> models) {
         List<BookingService> entities = BookingServiceCreateModel.toListEntity(models);
         List<Integer> newIds = bookingServiceDao.insertBatchBookingService(entities, BookingServiceStatus.REQUESTED);
         if (newIds != null && !newIds.isEmpty()) {
-            return newIds.stream()
-                    .map(this::getBookingServiceById)
-                    .collect(Collectors.toList());
+            return bookingServiceUsageDetailDao.findByIds(newIds);
         }
         return Collections.emptyList();
+    }
+
+    public List<BookingServiceUsageDetailViewModel> getByBookingIdExceptBookingServiceIds(int bookingId, List<BookingServiceUsageDetailViewModel> models) {
+        List<Integer> ids = models.stream().map(BookingServiceUsageDetailViewModel::getBookingServiceId).collect(Collectors.toList());
+        return bookingServiceUsageDetailDao.findByBookingIdExceptBookingServiceIds(bookingId, ids);
     }
 
 }

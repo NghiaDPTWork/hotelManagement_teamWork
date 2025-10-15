@@ -49,7 +49,7 @@ public class ServiceStaffDashboardController extends HttpServlet{
 
         List<BookingDetailViewModel> bookings = bookingService.getAllCheckInBookingDetails();
 
-        request.setAttribute(RequestAttribute.CHECK_IN_BOOKING_DETAILS, bookings);
+        request.setAttribute(RequestAttribute.ALL_CHECK_IN_BOOKING_DETAILS, bookings);
         request.getRequestDispatcher(Page.SERVICE_STAFF_DASHBOARD_PAGE).forward(request, response);
 
     }
