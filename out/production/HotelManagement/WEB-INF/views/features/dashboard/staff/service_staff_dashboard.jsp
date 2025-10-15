@@ -55,6 +55,9 @@
                 <td>
                     <a href="service-staff/add-service?bookingId=${b.bookingId}">Record Service</a>
                 </td>
+                <td>
+                    <a href="service-staff/service-usage-detail?bookingId=${b.bookingId}">Update service status</a>
+                </td>
             </tr>
         </c:forEach>
     </table>

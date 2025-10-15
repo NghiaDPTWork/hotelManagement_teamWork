@@ -56,4 +56,12 @@ public class BookingServiceUsageService {
         return bookingServiceUsageDetailDao.findByBookingIdExceptBookingServiceIds(bookingId, ids);
     }
 
+    public List<BookingServiceUsageDetailViewModel> getByBookingId(int bookingId) {
+        return bookingServiceUsageDetailDao.findByBookingId(bookingId);
+    }
+
+    public Boolean updateBookingServiceStatusToCompleted(int bookingServiceId) {
+        return bookingServiceDao.updateBookingServiceStatus(bookingServiceId, BookingServiceStatus.COMPLETED) > 0;
+    }
+
 }

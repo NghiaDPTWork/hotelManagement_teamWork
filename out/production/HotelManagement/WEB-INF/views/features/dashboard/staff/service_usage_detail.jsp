@@ -26,10 +26,6 @@
     <hr/>
 
     <h3>Service Usage</h3>
-    <%
-        System.out.println("newBookingServiceUsageModels: " + request.getAttribute("newBookingServiceUsageModels"));
-        System.out.println("oldBookingServiceUsageModels: " + request.getAttribute("oldBookingServiceUsageModels"));
-    %>
     <!-- New Booking Service Usage -->
     <c:if test="${not empty newBookingServiceUsageModels}">
         <h4>New Service Usage</h4>
@@ -67,9 +63,9 @@
                     <td>
                         <c:choose>
                             <c:when test="${s.bookingServiceStatus != 'Completed'}">
-                                <a href="updateServiceStatus?id=${s.bookingServiceId}&status=Completed">Mark Completed</a>
+                                <a href="update-booking-service-status?id=${s.bookingServiceId}">Mark Completed</a>
                             </c:when>
-                            <c:otherwise>Done</c:otherwise>
+                            <c:otherwise>Completed</c:otherwise>
                         </c:choose>
                     </td>
                 </tr>
@@ -121,9 +117,9 @@
                     <td>
                         <c:choose>
                             <c:when test="${s.bookingServiceStatus != 'Completed'}">
-                                <a href="updateServiceStatus?id=${s.bookingServiceId}&status=Completed">Mark Completed</a>
+                                <a href="update-booking-service-status?id=${s.bookingServiceId}">Mark Completed</a>
                             </c:when>
-                            <c:otherwise>Done</c:otherwise>
+                            <c:otherwise>Completed</c:otherwise>
                         </c:choose>
                     </td>
                 </tr>
