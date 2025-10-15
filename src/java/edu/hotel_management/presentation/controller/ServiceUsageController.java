@@ -1,12 +1,12 @@
 package edu.hotel_management.presentation.controller;
 
 import edu.hotel_management.application.service.BookingService;
+import edu.hotel_management.application.service.BookingServiceUsageService;
 import edu.hotel_management.domain.dto.booking.BookingDetailViewModel;
 import edu.hotel_management.domain.dto.booking_service.BookingServiceUsageDetailViewModel;
 import edu.hotel_management.infrastructure.persistence.dao.*;
 import edu.hotel_management.infrastructure.persistence.provider.DataSourceProvider;
 import edu.hotel_management.presentation.constants.Page;
-import edu.hotel_management.presentation.constants.Path;
 import edu.hotel_management.presentation.constants.RequestAttribute;
 import edu.hotel_management.presentation.constants.SessionAttribute;
 import java.io.IOException;
@@ -27,15 +27,21 @@ import javax.sql.DataSource;
 public class ServiceUsageController extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private BookingService bookingService;
+    private BookingServiceUsageService bookingServiceUsageService;
 
     @Override
     public void init() {
         BookingDAO bookingDao;
         BookingDetailDAO bookingDetailDao;
+        BookingServiceDAO bookingServiceDao;
+        BookingServiceUsageDetailDAO bookingServiceUsageDetailDao;
         DataSource ds = DataSourceProvider.getDataSource();
         bookingDao = new BookingDAO(ds);
         bookingDetailDao = new BookingDetailDAO(ds);
+        bookingServiceDao = new BookingServiceDAO(ds);
+        bookingServiceUsageDetailDao = new BookingServiceUsageDetailDAO(ds);
         this.bookingService = new BookingService(bookingDao, bookingDetailDao);
+        this.bookingServiceUsageService = new BookingServiceUsageService(bookingServiceDao, bookingServiceUsageDetailDao);
     }
 
     @Override
@@ -48,17 +54,15 @@ public class ServiceUsageController extends HttpServlet {
             if (bookingDetailViewModel == null) {
                 throw new IllegalArgumentException("Booking does not exist");
             }
+            @SuppressWarnings( "unchecked")
             List<BookingServiceUsageDetailViewModel> newBookingServiceUsageModels =
                     (List<BookingServiceUsageDetailViewModel>) session.getAttribute(SessionAttribute.LIST_NEW_BOOKING_SERVICE_USAGE);
-            if (newBookingServiceUsageModels == null) {
-                // If the session data for new booking service usage is missing, the user may have accessed this page directly or the session may have expired.
-                // Redirect to the dashboard to ensure proper navigation and prevent displaying incomplete or inconsistent data.
-                //In the future, we can adjust to display with the update status of the booking service usage.
-                response.sendRedirect(request.getContextPath() + Path.SERVICE_STAFF_DASHBOARD_PATH);
-                return;
-            }
+            @SuppressWarnings( "unchecked")
             List<BookingServiceUsageDetailViewModel> oldBookingServiceUsageModels =
                     (List<BookingServiceUsageDetailViewModel>) session.getAttribute(SessionAttribute.LIST_OLD_BOOKING_SERVICE_USAGE);
+            if (oldBookingServiceUsageModels == null) {
+                oldBookingServiceUsageModels = bookingServiceUsageService.getByBookingId(bookingId);
+            }
             request.setAttribute(RequestAttribute.CHECK_IN_BOOKING_DETAILS, bookingDetailViewModel);
             request.setAttribute(RequestAttribute.LIST_NEW_BOOKING_SERVICE_USAGE, newBookingServiceUsageModels);
             request.setAttribute(RequestAttribute.LIST_OLD_BOOKING_SERVICE_USAGE, oldBookingServiceUsageModels);

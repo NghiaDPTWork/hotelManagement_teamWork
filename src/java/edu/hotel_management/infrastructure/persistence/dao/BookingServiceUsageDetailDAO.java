@@ -1,6 +1,5 @@
 package edu.hotel_management.infrastructure.persistence.dao;
 
-
 import edu.hotel_management.domain.dto.booking_service.BookingServiceUsageDetailViewModel;
 import javax.sql.DataSource;
 import java.sql.ResultSet;
@@ -62,7 +61,6 @@ public class BookingServiceUsageDetailDAO extends BaseDAO<BookingServiceUsageDet
                 "FROM BOOKING_SERVICE BS\n" +
                 "JOIN SERVICE S ON BS.ServiceID = S.ServiceID\n" +
                 "WHERE BS.BookingID = ?", bookingId);
-
     }
 
     public List<BookingServiceUsageDetailViewModel> findByIds(List<Integer> bookingServiceIds) {
@@ -78,7 +76,6 @@ public class BookingServiceUsageDetailDAO extends BaseDAO<BookingServiceUsageDet
                 "FROM BOOKING_SERVICE BS\n" +
                 "JOIN SERVICE S ON BS.ServiceID = S.ServiceID\n" +
                 "WHERE BS.Booking_Service_ID IN (" + placeholders + ")", bookingServiceIds.toArray());
-
     }
 
     public List<BookingServiceUsageDetailViewModel> findByBookingIdExceptBookingServiceIds(int bookingId, List<Integer> bookingServiceExceptIds) {
@@ -97,6 +94,5 @@ public class BookingServiceUsageDetailDAO extends BaseDAO<BookingServiceUsageDet
                 "FROM BOOKING_SERVICE BS\n" +
                 "JOIN SERVICE S ON BS.ServiceID = S.ServiceID\n" +
                 "WHERE BS.BookingID = ? AND BS.Booking_Service_ID NOT IN (" + placeholders + ")", params.toArray());
-
     }
 }
