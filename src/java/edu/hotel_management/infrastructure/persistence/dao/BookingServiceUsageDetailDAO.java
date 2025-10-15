@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -84,7 +85,9 @@ public class BookingServiceUsageDetailDAO extends BaseDAO<BookingServiceUsageDet
         String placeholders = bookingServiceExceptIds.stream()
                 .map(id -> "?")
                 .collect(Collectors.joining(", "));
-        bookingServiceExceptIds.add(0, bookingId);
+        List<Object> params = new ArrayList<>();
+        params.add(bookingId);
+        params.addAll(bookingServiceExceptIds);
         return query("SELECT\n" +
                 "BS.Booking_Service_ID, BS.BookingID, \n" +
                 "S.ServiceID, S.ServiceName, S.ServiceType, BS.ServiceDate, \n" +
@@ -93,7 +96,7 @@ public class BookingServiceUsageDetailDAO extends BaseDAO<BookingServiceUsageDet
                 "(S.Price * BS.Quantity) AS SubPrice\n" +
                 "FROM BOOKING_SERVICE BS\n" +
                 "JOIN SERVICE S ON BS.ServiceID = S.ServiceID\n" +
-                "WHERE BS.BookingID = ? AND BS.Booking_Service_ID NOT IN (" + placeholders + ")", bookingServiceExceptIds.toArray());
+                "WHERE BS.BookingID = ? AND BS.Booking_Service_ID NOT IN (" + placeholders + ")", params.toArray());
 
     }
 }

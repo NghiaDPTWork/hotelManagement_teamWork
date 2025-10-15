@@ -76,7 +76,7 @@
                 <c:set var="newSubTotal" value="${newSubTotal + s.subPrice}"/>
             </c:forEach>
             <tr>
-                <td colspan="7" style="text-align:right;"><b>Total of new service usage</b></td>
+                <td colspan="9" style="text-align:right;"><b>Total of new service usage</b></td>
                 <td><b>${newSubTotal}</b></td>
             </tr>
             </tbody>
@@ -121,7 +121,7 @@
                     <td>
                         <c:choose>
                             <c:when test="${s.bookingServiceStatus != 'Completed'}">
-                                <a href="updateServiceStatus?id=${s.bookingServiceStatus}&status=Completed">Mark Completed</a>
+                                <a href="updateServiceStatus?id=${s.bookingServiceId}&status=Completed">Mark Completed</a>
                             </c:when>
                             <c:otherwise>Done</c:otherwise>
                         </c:choose>
@@ -130,7 +130,7 @@
                 <c:set var="oldSubTotal" value="${oldSubTotal + s.subPrice}"/>
             </c:forEach>
             <tr>
-                <td colspan="7" style="text-align:right;"><b>Total of services used previously</b></td>
+                <td colspan="9" style="text-align:right;"><b>Total of services used previously</b></td>
                 <td><b>${oldSubTotal}</b></td>
             </tr>
             </tbody>
@@ -146,7 +146,7 @@
         </div>
     </c:if>
 
-    <!-- Nếu cả hai đều rỗng -->
+    <!-- If both are empty -->
     <c:if test="${empty newBookingServiceUsageModels and empty oldBookingServiceUsageModels}">
         <p>No services recorded yet.</p>
     </c:if>

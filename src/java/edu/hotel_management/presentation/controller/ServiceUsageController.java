@@ -51,7 +51,9 @@ public class ServiceUsageController extends HttpServlet {
             List<BookingServiceUsageDetailViewModel> newBookingServiceUsageModels =
                     (List<BookingServiceUsageDetailViewModel>) session.getAttribute(SessionAttribute.LIST_NEW_BOOKING_SERVICE_USAGE);
             if (newBookingServiceUsageModels == null) {
-                /// ??????????
+                // If the session data for new booking service usage is missing, the user may have accessed this page directly or the session may have expired.
+                // Redirect to the dashboard to ensure proper navigation and prevent displaying incomplete or inconsistent data.
+                //In the future, we can adjust to display with the update status of the booking service usage.
                 response.sendRedirect(request.getContextPath() + Path.SERVICE_STAFF_DASHBOARD_PATH);
                 return;
             }
@@ -66,7 +68,7 @@ public class ServiceUsageController extends HttpServlet {
             request.getRequestDispatcher(Page.SERVICE_USAGE_DETAIL_PAGE).forward(request, response);
         } catch (NumberFormatException e) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid bookingId");
-        }catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
         }
     }
