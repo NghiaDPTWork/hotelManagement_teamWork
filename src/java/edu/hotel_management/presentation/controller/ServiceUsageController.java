@@ -54,10 +54,10 @@ public class ServiceUsageController extends HttpServlet {
             if (bookingDetailViewModel == null) {
                 throw new IllegalArgumentException("Booking does not exist");
             }
-            @SuppressWarnings( "unchecked")
+            @SuppressWarnings("unchecked")
             List<BookingServiceUsageDetailViewModel> newBookingServiceUsageModels =
                     (List<BookingServiceUsageDetailViewModel>) session.getAttribute(SessionAttribute.LIST_NEW_BOOKING_SERVICE_USAGE);
-            @SuppressWarnings( "unchecked")
+            @SuppressWarnings("unchecked")
             List<BookingServiceUsageDetailViewModel> oldBookingServiceUsageModels =
                     (List<BookingServiceUsageDetailViewModel>) session.getAttribute(SessionAttribute.LIST_OLD_BOOKING_SERVICE_USAGE);
             if (oldBookingServiceUsageModels == null) {

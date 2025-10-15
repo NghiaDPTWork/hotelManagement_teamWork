@@ -47,7 +47,7 @@ public class UpdateBookingServiceController extends HttpServlet {
             }
             response.sendRedirect(request.getContextPath() + "/service-staff/service-usage-detail?bookingId=" + bookingServiceViewModel.getBookingId());
         } catch (NumberFormatException e) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid bookingId");
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid booking service ID");
         } catch (IllegalArgumentException e) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND, e.getMessage());
         } catch (Exception e) {
