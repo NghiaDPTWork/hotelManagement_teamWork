@@ -21,7 +21,7 @@
 <hr>
 
 <!-- Result List -->
-<c:set var="bookings" value="${requestScope['checkInBookingDetails']}" />
+<c:set var="bookings" value="${requestScope['allCheckInBookingDetails']}" />
 <c:if test="${not empty bookings}">
     <table style="border-collapse: separate; border-spacing: 2px;">
         <tr>
@@ -38,7 +38,7 @@
             <th>Status</th>
         </tr>
 
-            <%--@elvariable id="b" type="com.hotel_management.domain.dto.booking.BookingDetailViewModel"--%>
+            <%--@elvariable id="b" type="edu.hotel_management.domain.dto.booking.BookingDetailViewModel"--%>
         <c:forEach var="b" items="${bookings}">
             <tr>
                 <td>${b.bookingId}</td>
