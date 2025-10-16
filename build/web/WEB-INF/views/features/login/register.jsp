@@ -17,7 +17,7 @@
             <div class="modal-body">
                 <p class="text-muted text-center small mb-4">Join us and start your journey with Hotel Misauka.</p>
 
-                <form action="<%= IConstant.ACTION_REGISTER %>" method="POST" id="registerForm">
+                <form action="<%= IConstant.ACTION_HOME %>?action=<%=IConstant.REGISTER %>" method="POST" id="registerForm">
                     
                     <%-- HI?N TH? THÔNG BÁO L?I (N?U CÓ) --%>
                     <% if ( RequestAttribute.ERROR_REGISTER_MESSAGE.trim() != null && !RequestAttribute.ERROR_REGISTER_MESSAGE.trim().isEmpty()) { %>

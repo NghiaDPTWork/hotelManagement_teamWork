@@ -16,12 +16,12 @@
 
                     <div class="card-body p-4">
 
-                        <form id="bookingForm" action="<%= IConstant.ACTION_ROOM_BOOKING%>" method="Post">
+                        <form id="bookingForm" action="<%= IConstant.PAGE_ROOM_BOOKING %>" method="Post">
                             <div class="row g-3">
 
                                 <div class="col-lg-4 col-md-6">
                                     <label for="arrivalDate" class="form-label text-muted small">Arrival Date</label>
-                                    <input type="date" class="form-control" id="arrivalDate" name="arrivalDate">
+                                    <input type="date" class="form-control" id="arrivalDate" name="checkinDate">
 
                                     <div class="invalid-feedback">
                                         Please select an arrival date.
@@ -31,9 +31,8 @@
                                 <div class="col-lg-4 col-md-6">
 
                                     <label for="departureDate" class="form-label text-muted small">Departure Date</label>
-                                    <input type="date" class="form-control" id="departureDate" name="departureDate">
+                                    <input type="date" class="form-control" id="departureDate" name="checkoutDate">
                                     <div class="invalid-feedback">
-
                                         Please select a departure date.
                                     </div>
                                 </div>
@@ -50,7 +49,6 @@
                                         <option value="3">Marina Deluxe Room</option>
                                     </select>
                                     <div class="invalid-feedback">
-
                                         Please select a room type.
                                     </div>
                                 </div>
@@ -60,7 +58,6 @@
                                     <label for="adults" class="form-label text-muted small">Adults</label>
                                     <input type="number" class="form-control" id="adults" name="adults" value="2" min="1">
                                     <div class="invalid-feedback">
-
                                         The number of adults must be at least 1.
                                     </div>
 
@@ -77,13 +74,11 @@
                                     <%
                                         if (session.getAttribute(SessionAttribute.USER) == null) {
                                     %>
-
                                     <button type="button" class="btn btn-warning w-100 py-2 mt-2" data-bs-toggle="modal" data-bs-target="#loginModal">Check Availability</button>
                                     <%
                                     } else {
                                     %>
                                     <button type="submit" class="btn btn-warning w-100 py-2 mt-2">Check Availability</button>
-
                                     <%
                                         }
 

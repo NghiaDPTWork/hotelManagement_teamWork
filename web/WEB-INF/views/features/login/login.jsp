@@ -20,13 +20,13 @@
             <div class="modal-body">
                 <p class="text-muted text-center small mb-4">Sign in to continue to Hotel Misuka.</p>
 
-                <form action="<%= IConstant.ACTION_LOGIN %>" method="POST">
-                    
+                <%-- Form action trỏ đến HomeController là đúng --%>
+                <form action="<%= IConstant.ACTION_HOME %>" method="POST">
+
                     <%-- Hiển thị thông báo lỗi nếu có --%>
                     <%
                         if (request.getAttribute(RequestAttribute.ERROR_LOGIN_MESSAGE) != null && !request.getAttribute(RequestAttribute.ERROR_LOGIN_MESSAGE).toString().isEmpty()) {
                             String errorMessage = (String) request.getAttribute(RequestAttribute.ERROR_LOGIN_MESSAGE);
-
                     %>
                             <div class="alert alert-danger text-center small py-2 mb-3">
                                 <%= errorMessage %>
@@ -45,7 +45,8 @@
                     </div>
                     
                     <div class="d-grid mt-4">
-                        <button type="submit" class="btn btn-warning btn-lg">Login</button>
+                        <%-- SỬA ĐỔI Ở ĐÂY: Button bây giờ chỉ có nhiệm vụ submit form --%>
+                        <input type="submit" name="action" value="<%=IConstant.LOGIN%>" class="btn btn-warning btn-lg"></input>
                     </div>
                 </form>
             </div>
@@ -62,7 +63,7 @@
     </div>
 </div>
 
-<%-- SCRIPT TỰ ĐỘNG MỞ POP-UP KHI CÓ LỖI  --%>
+<%-- SCRIPT TỰ ĐỘNG MỞ POP-UP KHI CÓ LỖI (Phần này đã đúng) --%>
 <%
     if (request.getAttribute(RequestAttribute.ERROR_LOGIN_MESSAGE) != null && !request.getAttribute(RequestAttribute.ERROR_LOGIN_MESSAGE).toString().isEmpty()) {
 %>

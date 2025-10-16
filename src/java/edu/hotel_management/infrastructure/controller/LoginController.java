@@ -65,19 +65,19 @@ public class LoginController extends HttpServlet {
                     userRole = "GUEST";
                 }
 
-                String redirectUrl = IConstant.PAGE_HOME;
+                String url = IConstant.PAGE_HOME;
                 switch (userRole.toUpperCase()) {
                     case "ADMIN":
-                        redirectUrl = "/admin/dashboard"; 
+                        url = ""; 
                         break;
                     case "RECEPTIONIST":
-                        redirectUrl = "/receptionist/bookings"; 
+                        url = ""; 
                         break;
                     case "GUEST":
-                        redirectUrl = IConstant.PAGE_HOME;
+                        url = IConstant.PAGE_HOME;
                         break;
                 }
-                response.sendRedirect(request.getContextPath() + redirectUrl);
+                request.getRequestDispatcher(url).forward(request, response);
 
             } else {
                 request.setAttribute(RequestAttribute.ERROR_LOGIN_MESSAGE, "Incorrect username or password.");

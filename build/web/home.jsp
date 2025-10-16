@@ -13,7 +13,7 @@
 <%-- Navbar  --%>
 <%@ include file="./WEB-INF/views/features/login/navbar.jsp" %>
 
-<%-- Login Modal (?n) --%>
+<%-- Login Modal --%>
 <%@ include file="WEB-INF/views/features/login/login.jsp" %>
 
 <%-- Register Modal (?n) --%>

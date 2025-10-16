@@ -62,7 +62,7 @@
                 <%
                     } else {
                 %>
-                <a href="<%= IConstant.ACTION_LOGIN %>" class="info-link" data-bs-toggle="modal" data-bs-target="#loginModal">
+                <a href="<%=IConstant.ACTION_HOME%>?action=<%=IConstant.LOGIN%>" class="info-link" data-bs-toggle="modal" data-bs-target="#loginModal">
                             <i class="bi bi-person-circle me-2"></i>
                             <span>Login</span>
                         </a>

@@ -17,7 +17,6 @@ import javax.servlet.http.HttpServletResponse;
 
 @WebServlet(name = "RegisterController", urlPatterns = {"/RegisterController"})
 public class RegisterController extends HttpServlet {
-
     private GuestService guestService;
 
     @Override
@@ -32,7 +31,7 @@ public class RegisterController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8");
 
-        String url = IConstant.PAGE_HOME;
+        String url = IConstant.ACTION_HOME;
 
         try {
             //========== LẤY DỮ LIỆU TỪ FORM ==========

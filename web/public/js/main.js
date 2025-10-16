@@ -1,8 +1,11 @@
+// Hotel Misauka - Main JavaScript
+
 document.addEventListener('DOMContentLoaded', function () {
 
-    /*--- 1. Navbar Scroll Effect ---*/
+    //========== 1. NAVBAR SCROLL EFFECT ==========
     const navbar = document.querySelector('.navbar');
-    if (navbar) {
+    // Chỉ áp dụng hiệu ứng cuộn nếu không phải trang có navbar nền trắng sẵn
+    if (navbar && !document.body.classList.contains('page-solid-navbar')) {
         window.addEventListener('scroll', () => {
             if (window.scrollY > 50) {
                 navbar.classList.add('scrolled');
@@ -12,7 +15,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    /*--- 2. Booking Form Date Logic ---*/
+    //========== 2. BOOKING FORM DATE LOGIC ==========
     const arrivalDateInput = document.getElementById('arrivalDate');
     const departureDateInput = document.getElementById('departureDate');
     if (arrivalDateInput && departureDateInput) {
@@ -24,14 +27,14 @@ document.addEventListener('DOMContentLoaded', function () {
                 arrivalDate.setDate(arrivalDate.getDate() + 1);
                 const nextDay = arrivalDate.toISOString().split('T')[0];
                 departureDateInput.setAttribute('min', nextDay);
-                if (departureDateInput.value && departureDateInput.value < nextDay) {
+                if (departureDateInput.value && new Date(departureDateInput.value) < arrivalDate) {
                     departureDateInput.value = '';
                 }
             }
         });
     }
 
-    /*--- 3. Scroll Animation ---*/
+    //========== 3. SCROLL ANIMATION ==========
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -43,193 +46,243 @@ document.addEventListener('DOMContentLoaded', function () {
     });
     const elementsToAnimate = document.querySelectorAll('.scroll-animate');
     elementsToAnimate.forEach(el => observer.observe(el));
-
-    /*--- 4. Register Form Validation ---*/
-    const registerForm = document.getElementById('registerForm');
-    if (registerForm) {
-        registerForm.addEventListener('submit', function (event) {
-            event.preventDefault(); // Ngăn form gửi đi để kiểm tra
-
-            let isFormValid = true;
-
-            // Xóa các lỗi cũ
-            this.querySelectorAll('.is-invalid').forEach(el => el.classList.remove('is-invalid'));
-
-            // Lấy các trường input
-            const fullName = document.getElementById('signup-fullname');
-            const username = document.getElementById('signup-username');
-            const email = document.getElementById('signup-email');
-            const phone = document.getElementById('signup-phone');
-            const password = document.getElementById('signup-password');
-            const confirmPassword = document.getElementById('signup-confirm-password');
-
-            // Hàm hỗ trợ kiểm tra lỗi và cập nhật UI
-            function validateField(field, condition) {
-                if (condition) {
-                    field.classList.remove('is-invalid');
-                    return true;
-                } else {
-                    field.classList.add('is-invalid');
-                    isFormValid = false;
-                    return false;
-                }
+    
+    //========== 4. FORM VALIDATION (CHO CẢ REGISTER VÀ BOOKING) ==========
+    const formsToValidate = document.querySelectorAll('form[novalidate]');
+    formsToValidate.forEach(form => {
+        form.addEventListener('submit', function(event) {
+            if (!this.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
             }
+            this.classList.add('was-validated');
+        });
+    });
 
-            // Thực hiện kiểm tra
-            validateField(fullName, fullName.value.trim() !== '');
-            validateField(username, username.value.length >= 6);
-            validateField(email, /^\S+@\S+\.\S+$/.test(email.value));
-            validateField(phone, /(0[3|5|7|8|9])+([0-9]{8})\b/.test(phone.value));
-            validateField(password, password.value.length >= 8);
-            
-            // Kiểm tra mật khẩu xác nhận
-            if (password.value !== confirmPassword.value || confirmPassword.value === '') {
-                confirmPassword.classList.add('is-invalid');
-                // Cập nhật thông báo lỗi tương ứng
-                const errorDiv = confirmPassword.nextElementSibling;
-                if (errorDiv && errorDiv.classList.contains('invalid-feedback')) {
-                    errorDiv.textContent = (password.value !== confirmPassword.value) 
-                        ? 'Mật khẩu không khớp.' 
-                        : 'Vui lòng xác nhận mật khẩu.';
-                }
-                isFormValid = false;
+    //========== 5. BACK TO TOP BUTTON ==========
+    const backToTopBtn = document.getElementById('backToTop');
+    if (backToTopBtn) {
+        window.addEventListener('scroll', function () {
+            if (window.scrollY > 300) {
+                backToTopBtn.style.display = 'block';
             } else {
-                confirmPassword.classList.remove('is-invalid');
+                backToTopBtn.style.display = 'none';
             }
+        });
+        backToTopBtn.addEventListener('click', function () {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    }
 
-            // Nếu tất cả hợp lệ, gửi form đi
-            if (isFormValid) {
-                console.log('Register form is valid, submitting...');
-                this.submit();
+    //========== 6. RATE TAB SWITCHING ==========
+    const rateTabs = document.querySelectorAll('.rate-tab');
+    rateTabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+            // Remove active class from all tabs
+            rateTabs.forEach(t => t.classList.remove('active'));
+            // Add active class to clicked tab
+            this.classList.add('active');
+        });
+    });
+
+    //========== 7. ROOM CAROUSEL AUTO-PAUSE ON HOVER ==========
+    const roomCarousels = document.querySelectorAll('.room-carousel');
+    roomCarousels.forEach(carousel => {
+        carousel.addEventListener('mouseenter', function() {
+            const bsCarousel = bootstrap.Carousel.getInstance(this);
+            if (bsCarousel) {
+                bsCarousel.pause();
+            }
+        });
+        
+        carousel.addEventListener('mouseleave', function() {
+            const bsCarousel = bootstrap.Carousel.getInstance(this);
+            if (bsCarousel) {
+                bsCarousel.cycle();
+            }
+        });
+    });
+
+    //========== 8. SELECT BUTTON FUNCTIONALITY ==========
+    const selectButtons = document.querySelectorAll('.btn-select-modern');
+    selectButtons.forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            // Add loading state
+            const originalText = this.textContent;
+            this.textContent = 'Loading...';
+            this.disabled = true;
+            
+            // Simulate booking process
+            setTimeout(() => {
+                this.textContent = '✓ Selected';
+                this.style.background = '#10b981';
+                
+                // Reset after 2 seconds
+                setTimeout(() => {
+                    this.textContent = originalText;
+                    this.style.background = '';
+                    this.disabled = false;
+                }, 2000);
+            }, 1000);
+        });
+    });
+
+    //========== 9. STICKY BOOKING SUMMARY BAR ==========
+    const bookingSummaryBar = document.querySelector('.booking-summary-bar');
+    if (bookingSummaryBar) {
+        let lastScrollTop = 0;
+        window.addEventListener('scroll', function() {
+            let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            
+            if (scrollTop > 200) {
+                bookingSummaryBar.style.boxShadow = '0 4px 12px rgba(0,0,0,0.1)';
+            } else {
+                bookingSummaryBar.style.boxShadow = '0 2px 4px rgba(0,0,0,0.05)';
+            }
+            
+            lastScrollTop = scrollTop;
+        });
+    }
+
+    //========== 10. CURRENCY SELECTOR ==========
+    const currencySelect = document.querySelector('.currency-select');
+    if (currencySelect) {
+        currencySelect.addEventListener('change', function() {
+            const selectedCurrency = this.value;
+            const priceElements = document.querySelectorAll('.price-value');
+            
+            // This would typically make an API call to convert currencies
+            // For now, we'll just update the display
+            console.log('Currency changed to:', selectedCurrency);
+            
+            // You can add currency conversion logic here
+        });
+    }
+
+    //========== 11. FILTER BUTTONS FUNCTIONALITY ==========
+    const filterButtons = document.querySelectorAll('.btn-filter-outline');
+    filterButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            // Toggle active state
+            this.classList.toggle('active');
+            
+            // You can add actual filtering logic here
+            console.log('Filter clicked:', this.textContent.trim());
+        });
+    });
+
+    //========== 12. ROOM DETAILS LINK ==========
+    const roomDetailsLinks = document.querySelectorAll('.room-details-link');
+    roomDetailsLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            // Open modal or navigate to room details page
+            console.log('Room details clicked');
+            // You can add modal opening logic or page navigation here
+        });
+    });
+
+    //========== 13. RATE DETAILS LINK ==========
+    const rateDetailsLinks = document.querySelectorAll('.rate-details-link');
+    rateDetailsLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            // Open modal with rate details
+            console.log('Rate details clicked');
+            // You can add modal opening logic here
+        });
+    });
+
+    //========== 14. SHOW WITH TAXES CHECKBOX ==========
+    const taxCheckbox = document.querySelector('.tax-checkbox input');
+    if (taxCheckbox) {
+        taxCheckbox.addEventListener('change', function() {
+            const priceElements = document.querySelectorAll('.price-value');
+            
+            if (this.checked) {
+                // Add taxes to prices (example: 10% tax)
+                priceElements.forEach(price => {
+                    const currentPrice = parseFloat(price.textContent.replace(/,/g, ''));
+                    const priceWithTax = currentPrice * 1.1;
+                    price.textContent = priceWithTax.toLocaleString('vi-VN');
+                });
+            } else {
+                // Remove taxes from prices
+                priceElements.forEach(price => {
+                    const currentPrice = parseFloat(price.textContent.replace(/,/g, ''));
+                    const priceWithoutTax = currentPrice / 1.1;
+                    price.textContent = priceWithoutTax.toLocaleString('vi-VN');
+                });
             }
         });
     }
 
+    //========== 15. EDIT BUTTON FUNCTIONALITY ==========
+    const editButtons = document.querySelectorAll('.edit-btn-new');
+    editButtons.forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            // Navigate back to booking form or open edit modal
+            console.log('Edit booking clicked');
+            // window.location.href = 'index.jsp#booking';
+        });
+    });
 
-    /*--- 5. Booking Form Submission Validation ---*/
-    const bookingForm = document.getElementById('bookingForm');
-    if (bookingForm) {
-        bookingForm.addEventListener('submit', function (event) {
-            // Ngăn chặn việc gửi form ngay lập tức để thực hiện kiểm tra
-            event.preventDefault();
+    //========== 16. SMOOTH SCROLL FOR ANCHOR LINKS ==========
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            const href = this.getAttribute('href');
+            if (href !== '#' && href !== '') {
+                e.preventDefault();
+                const target = document.querySelector(href);
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            }
+        });
+    });
 
-            let isFormValid = true;
-            
-            // Lấy các trường input
-            const arrivalDate = document.getElementById('arrivalDate');
-            const departureDate = document.getElementById('departureDate');
-            const roomType = document.getElementById('roomType');
-            const adults = document.getElementById('adults');
+    //========== 17. INITIALIZE BOOTSTRAP TOOLTIPS ==========
+    const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
+    });
 
-            // Xóa lỗi cũ
-            const fields = [arrivalDate, departureDate, roomType, adults];
-            fields.forEach(field => {
-                if(field) field.classList.remove('is-invalid')
+    //========== 18. ROOM CARD HOVER EFFECTS ==========
+    const roomCards = document.querySelectorAll('.room-card-modern');
+    roomCards.forEach(card => {
+        card.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-2px)';
+        });
+        
+        card.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0)';
+        });
+    });
+
+    //========== 19. LAZY LOADING IMAGES ==========
+    if ('IntersectionObserver' in window) {
+        const imageObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const img = entry.target;
+                    img.src = img.dataset.src || img.src;
+                    img.classList.add('loaded');
+                    observer.unobserve(img);
+                }
             });
-
-            // Kiểm tra từng trường
-            if (!arrivalDate || arrivalDate.value === '') {
-                arrivalDate.classList.add('is-invalid');
-                isFormValid = false;
-            }
-            if (!departureDate || departureDate.value === '') {
-                departureDate.classList.add('is-invalid');
-                isFormValid = false;
-            }
-            if (!roomType || roomType.value === '') {
-                roomType.classList.add('is-invalid');
-                isFormValid = false;
-            }
-            if (!adults || adults.value < 1) {
-                adults.classList.add('is-invalid');
-                isFormValid = false;
-            }
-
-            // Nếu form hợp lệ, gửi đi
-            if (isFormValid) {
-                console.log('Booking form is valid, submitting...');
-                this.submit(); // Gửi form đi sau khi đã kiểm tra hợp lệ
-            }
         });
+
+        const lazyImages = document.querySelectorAll('img[data-src]');
+        lazyImages.forEach(img => imageObserver.observe(img));
     }
 
-    /*--- 6. Room Detail Modal Logic (ĐÃ CẬP NHẬT) ---*/
-    const roomDetailModal = document.getElementById('roomDetailModal');
-    if (roomDetailModal) {
-
-        // Lắng nghe sự kiện khi modal sắp được hiển thị
-        roomDetailModal.addEventListener('show.bs.modal', function (event) {
-            const button = event.relatedTarget; // Nút đã kích hoạt modal
-
-            // Trích xuất thông tin từ các thuộc tính data-* của nút
-            const roomId = button.getAttribute('data-room-id');
-            const roomName = button.getAttribute('data-room-name');
-            const roomPrice = button.getAttribute('data-room-price');
-            const roomImage = button.getAttribute('data-room-image');
-
-            // Tìm thẻ card chứa nút để lấy mô tả và tiện nghi
-            const roomCardBody = button.closest('.card-body');
-            const roomDescription = roomCardBody.querySelector('.card-text').textContent;
-            const roomAmenitiesHTML = roomCardBody.querySelector('.room-amenities-list').innerHTML;
-
-            // Cập nhật nội dung của modal
-            const modal = this;
-            const modalBody = modal.querySelector('.modal-body');
-
-            // Cập nhật nội dung động cho modal
-            modal.querySelector('#modalRoomTitle').textContent = roomName;
-            modalBody.innerHTML = `
-                <div class="row">
-                    <div class="col-md-6">
-                        <img src="${roomImage}" class="img-fluid rounded" alt="Room Image">
-                    </div>
-                    <div class="col-md-6">
-                        <p class="text-muted">${roomDescription}</p>
-                        <h5>Amenities</h5>
-                        <ul class="room-amenities-list">
-                            ${roomAmenitiesHTML}
-                        </ul>
-                        <div class="mt-3">
-                            <p class="room-price mb-0 fs-4">${roomPrice}</p>
-                        </div>
-                    </div>
-                </div>
-            `;
-            
-            // Gắn ID của phòng vào nút "Book This Room" để sử dụng sau
-            modal.querySelector('#bookNowBtn').dataset.roomId = roomId;
-        });
-
-        // Xử lý khi nhấn nút "Book This Room" bên trong modal
-        const bookNowBtn = document.getElementById('bookNowBtn');
-        bookNowBtn.addEventListener('click', function () {
-            const roomIdToBook = this.dataset.roomId; // Lấy ID phòng đã lưu
-
-            // 1. Cập nhật loại phòng trong booking form chính
-            const roomTypeSelect = document.getElementById('roomType');
-            if (roomTypeSelect && roomIdToBook) {
-                roomTypeSelect.value = roomIdToBook;
-            }
-
-            // 2. Đóng modal
-            const modalInstance = bootstrap.Modal.getInstance(roomDetailModal);
-            modalInstance.hide();
-            
-            // 3. Tìm nút submit chính của booking form
-            const mainBookingForm = document.getElementById('bookingForm');
-            const mainSubmitButton = mainBookingForm.querySelector('button[type="submit"]');
-
-            if (mainSubmitButton) {
-                // 4. Kích hoạt sự kiện click trên nút submit chính
-                // Hành động này sẽ kích hoạt logic validation (phần 5) mà bạn đã viết.
-                mainSubmitButton.click();
-            } else {
-                // Xử lý trường hợp người dùng chưa đăng nhập, nút submit không tồn tại
-                const loginButton = mainBookingForm.querySelector('button[data-bs-target="#loginModal"]');
-                if (loginButton) {
-                     loginButton.click();
-                }
-            }
-        });
-    }
+    //========== 20. CONSOLE LOG FOR DEBUGGING ==========
+    console.log('Hotel Misauka - Booking Dashboard Initialized');
+    console.log('Total rooms displayed:', document.querySelectorAll('.room-card-modern').length);
 });

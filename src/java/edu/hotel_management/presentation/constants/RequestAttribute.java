@@ -16,4 +16,5 @@ public interface RequestAttribute {
     public static String ERROR_LOGIN_MESSAGE = "";
     public static String SUCCESS_REGISTER_MESSAGE = "";
     
+    
 }
