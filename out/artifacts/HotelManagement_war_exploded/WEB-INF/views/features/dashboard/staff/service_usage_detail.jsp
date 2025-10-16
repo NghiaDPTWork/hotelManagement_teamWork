@@ -63,7 +63,7 @@
                     <td>
                         <c:choose>
                             <c:when test="${s.bookingServiceStatus != 'Completed'}">
-                                <a href="update-booking-service-status?id=${s.bookingServiceId}">Mark Completed</a>
+                                <a href="booking-services/status?id=${s.bookingServiceId}">Mark Completed</a>
                             </c:when>
                             <c:otherwise>Completed</c:otherwise>
                         </c:choose>
@@ -117,7 +117,7 @@
                     <td>
                         <c:choose>
                             <c:when test="${s.bookingServiceStatus != 'Completed'}">
-                                <a href="update-booking-service-status?id=${s.bookingServiceId}">Mark Completed</a>
+                                <a href="booking-services/status?id=${s.bookingServiceId}">Mark Completed</a>
                             </c:when>
                             <c:otherwise>Completed</c:otherwise>
                         </c:choose>
@@ -147,7 +147,7 @@
         <p>No services recorded yet.</p>
     </c:if>
 
-    <a href="add-service?bookingId=${booking.bookingId}">Add More Service</a>
+    <a href="services?bookingId=${booking.bookingId}">Add More Service</a>
     <br/>
     <a href="${pageContext.request.contextPath}/service-staff">Back to Booking List</a>
 

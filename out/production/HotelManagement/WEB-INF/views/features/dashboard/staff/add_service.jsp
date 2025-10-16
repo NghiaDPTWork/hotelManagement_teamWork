@@ -17,12 +17,14 @@
         <p><strong>Guest Name:</strong> ${booking.guestFullName}</p>
         <p><strong>Room Number:</strong> ${booking.roomNumber}</p>
         <p><strong>Status:</strong> ${booking.status}</p>
+        <p><strong>Check-in</strong>: ${booking.checkInDate}</p>
+        <p><strong>Check-out</strong>: ${booking.checkOutDate}</p>
     </div>
 
     <hr>
 
     <!-- Form add service -->
-    <form action="add-service" method="post">
+    <form action="services" method="post">
         <input type="hidden" name="bookingId" value="${booking.bookingId}" />
         <c:set var="services" value="${requestScope['services']}" />
         <%--@elvariable id="services" type="edu.hotel_management.domain.dto.service.ServiceViewModel"--%>

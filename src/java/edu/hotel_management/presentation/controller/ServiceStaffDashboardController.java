@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package edu.hotel_management.presentation.controller;
 
 import edu.hotel_management.application.service.BookingService;
@@ -11,7 +7,6 @@ import edu.hotel_management.infrastructure.persistence.dao.BookingDetailDAO;
 import edu.hotel_management.infrastructure.persistence.provider.DataSourceProvider;
 import edu.hotel_management.presentation.constants.Page;
 import edu.hotel_management.presentation.constants.RequestAttribute;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -20,7 +15,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 import java.io.IOException;
 import java.util.List;
-
 /**
  *
  * @author thuannd.dev
@@ -44,13 +38,27 @@ public class ServiceStaffDashboardController extends HttpServlet{
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-//        String guestName = request.getParameter("guestName");
-//        String roomNumber = request.getParameter("roomNumber");
-
-        List<BookingDetailViewModel> bookings = bookingService.getAllCheckInBookingDetails();
-
-        request.setAttribute(RequestAttribute.ALL_CHECK_IN_BOOKING_DETAILS, bookings);
-        request.getRequestDispatcher(Page.SERVICE_STAFF_DASHBOARD_PAGE).forward(request, response);
+        try {
+            String searchType = request.getParameter("searchType");
+            String query = request.getParameter("searchValue");
+            // if one of two fields is null -> throw error
+            if (query != null && query.trim().isEmpty()) {
+                query = null;
+            }
+            if ((searchType == null) != (query == null)) {
+                throw new ServletException("Invalid search parameters");
+            }
+            List<BookingDetailViewModel> bookings = bookingService.findBookings(searchType, query);
+            request.setAttribute(RequestAttribute.BOOKING_SEARCH_TYPE, searchType);
+            request.setAttribute(RequestAttribute.BOOKING_SEARCH_VALUE, query);
+            request.setAttribute(RequestAttribute.LIST_CHECK_IN_BOOKING_DETAILS, bookings);
+            request.getRequestDispatcher(Page.SERVICE_STAFF_DASHBOARD_PAGE).forward(request, response);
+        } catch (ServletException servletException) {
+            //request.setAttribute(RequestAttribute.ERROR_MESSAGE, servletException.getMessage());
+            //request.getRequestDispatcher(Page.SERVICE_STAFF_DASHBOARD_PAGE).forward(request, response);
+            //Implement error handling later
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, servletException.getMessage());
+        }
 
     }
 

@@ -78,4 +78,67 @@ public class BookingDetailDAO extends BaseDAO<BookingDetailViewModel> {
                 "WHERE B.Status = ?", status.getDbValue());
     }
 
+    public List<BookingDetailViewModel> findByFullNameAndStatus(String fullName, BookingStatus status) {
+        return query(
+                "SELECT\n" +
+                "B.BookingID, B.GuestID, G.FullName, G.Phone,\n" +
+                "G.IDNumber, B.RoomID, R.RoomNumber, B.CheckInDate,\n" +
+                "B.CheckOutDate, B.BookingDate, B.Status, B.TotalGuests,\n" +
+                "B.SpecialRequests, B.PaymentStatus, B.CancellationDate,\n" +
+                "B.CancellationReason FROM BOOKING B\n" +
+                "LEFT JOIN ROOM R ON B.RoomID = R.RoomID\n" +
+                "LEFT JOIN GUEST G ON B.GuestID = G.GuestID\n" +
+                "WHERE G.FullName COLLATE Latin1_General_CI_AI LIKE ?\n" +
+                "AND B.Status = ?",
+        "%" + fullName + "%", status.getDbValue()
+        );
+    }
+
+    public Optional<BookingDetailViewModel> findByRoomNumberAndStatus(String roomNumber, BookingStatus status) {
+        List<BookingDetailViewModel> bookings = query(
+                "SELECT\n" +
+                "B.BookingID, B.GuestID, G.FullName, G.Phone,\n" +
+                "G.IDNumber, B.RoomID, R.RoomNumber, B.CheckInDate,\n" +
+                "B.CheckOutDate, B.BookingDate, B.Status, B.TotalGuests,\n" +
+                "B.SpecialRequests, B.PaymentStatus, B.CancellationDate,\n" +
+                "B.CancellationReason FROM BOOKING B\n" +
+                "LEFT JOIN ROOM R ON B.RoomID = R.RoomID\n" +
+                "LEFT JOIN GUEST G ON B.GuestID = G.GuestID\n" +
+                "WHERE R.RoomNumber = ? AND B.Status = ?",
+                roomNumber, status.getDbValue()
+        );
+        return bookings.stream().findFirst();
+    }
+
+    public Optional<BookingDetailViewModel> findByGuestPhoneAndStatus(String phone, BookingStatus status) {
+        List<BookingDetailViewModel> bookings = query(
+                "SELECT\n" +
+                "B.BookingID, B.GuestID, G.FullName, G.Phone,\n" +
+                "G.IDNumber, B.RoomID, R.RoomNumber, B.CheckInDate,\n" +
+                "B.CheckOutDate, B.BookingDate, B.Status, B.TotalGuests,\n" +
+                "B.SpecialRequests, B.PaymentStatus, B.CancellationDate,\n" +
+                "B.CancellationReason FROM BOOKING B\n" +
+                "LEFT JOIN ROOM R ON B.RoomID = R.RoomID\n" +
+                "LEFT JOIN GUEST G ON B.GuestID = G.GuestID\n" +
+                "WHERE G.Phone = ? AND B.Status = ?",
+                phone, status.getDbValue()
+        );
+        return bookings.stream().findFirst();
+    }
+
+    public Optional<BookingDetailViewModel> findByGuestIdNumberAndStatus(String idNumber, BookingStatus status) {
+        List<BookingDetailViewModel> bookings = query(
+                "SELECT\n" +
+                "B.BookingID, B.GuestID, G.FullName, G.Phone,\n" +
+                "G.IDNumber, B.RoomID, R.RoomNumber, B.CheckInDate,\n" +
+                "B.CheckOutDate, B.BookingDate, B.Status, B.TotalGuests,\n" +
+                "B.SpecialRequests, B.PaymentStatus, B.CancellationDate,\n" +
+                "B.CancellationReason FROM BOOKING B\n" +
+                "LEFT JOIN ROOM R ON B.RoomID = R.RoomID\n" +
+                "LEFT JOIN GUEST G ON B.GuestID = G.GuestID\n" +
+                "WHERE G.IDNumber = ? AND B.Status = ?",
+                idNumber, status.getDbValue()
+        );
+        return bookings.stream().findFirst();
+    }
 }
