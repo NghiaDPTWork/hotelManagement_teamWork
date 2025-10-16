@@ -54,8 +54,14 @@ public interface IConstant {
 
     
     //========== CÁC TRANG CHUC NANG CHÍNH ==========
+<<<<<<< HEAD
     public static final String PAGE_LOGIN = "/WEB-INF/views/features/login/login.jsp";
     public static final String PAGE_SIGN_UP = "/WEB-INF/views/features/login/sign-up.jsp";
     public static final String PAGE_ROOM_BOOKING = "/WEB-INF/views/layout/bookingDashboard.jsp";
+=======
+    public static final String PAGE_LOGIN = "/WEB-INF/views/features/auth/login.jsp";
+    public static final String PAGE_SIGN_UP = "/WEB-INF/views/features/auth/sign-up.jsp";
+    public static final String PAGE_ROOM_BOOKING = "/WEB-INF/views/features/booking/viewRoomsBooking.jsp";
+>>>>>>> ceb12419d611a5f985f89a588c802fe945e0e9ab
 
 }

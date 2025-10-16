@@ -6,10 +6,12 @@ package edu.hotel_management.presentation.constants;
 
 /**
  *
- * @author TR_NGHIA
+ * @author thuannd.dev
  */
 
-public interface SessionAttribute {
-
+public final class SessionAttribute {
+    private SessionAttribute() {}
     public static final String USER = "USER";
+    public static final String LIST_NEW_BOOKING_SERVICE_USAGE = "listNewBookingServiceUsage";
+    public static final String LIST_OLD_BOOKING_SERVICE_USAGE = "listOldBookingServiceUsage";
 }

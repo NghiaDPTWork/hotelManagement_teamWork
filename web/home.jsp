@@ -11,13 +11,18 @@
 <%@ include file="./WEB-INF/views/shared/alert.jsp" %>
 
 <%-- Navbar  --%>
-<%@ include file="./WEB-INF/views/features/login/navbar.jsp" %>
+<%@ include file="./WEB-INF/views/features/auth/navbar.jsp" %>
 
+<<<<<<< HEAD
 <%-- Login Modal --%>
 <%@ include file="WEB-INF/views/features/login/login.jsp" %>
+=======
+<%-- Login Modal (?n) --%>
+<%@ include file="WEB-INF/views/features/auth/login.jsp" %>
+>>>>>>> ceb12419d611a5f985f89a588c802fe945e0e9ab
 
 <%-- Register Modal (?n) --%>
-<%@ include file="WEB-INF/views/features/login/register.jsp" %>
+<%@ include file="WEB-INF/views/features/auth/register.jsp" %>
 
 <main>
     <%-- Hero Section --%>

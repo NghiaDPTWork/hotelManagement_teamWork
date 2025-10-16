@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
@@ -12,13 +13,27 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import javax.sql.DataSource;
+=======
+package edu.hotel_management.infrastructure.persistence.dao;
+
+import edu.hotel_management.domain.entities.Booking;
+import edu.hotel_management.domain.entities.enums.BookingStatus;
+import edu.hotel_management.domain.entities.enums.PaymentStatus;
+
+import javax.sql.DataSource;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.Optional;
+>>>>>>> ceb12419d611a5f985f89a588c802fe945e0e9ab
 
 /**
  *
- * @author TR_NGHIA
+ * @author thuannd.dev
  */
 public class BookingDAO extends BaseDAO<Booking> {
 
+<<<<<<< HEAD
     // ========= CONSTRUCTOR =========
     public BookingDAO(DataSource dataSource) {
         super(dataSource);
@@ -27,10 +42,19 @@ public class BookingDAO extends BaseDAO<Booking> {
     // ========= ROW MAPPER =========
     @Override
     public Booking mapRowtoObject(ResultSet rs) throws SQLException {
+=======
+    public BookingDAO(DataSource ds) {
+        super(ds);
+    }
+
+    @Override
+    public Booking mapRow(ResultSet rs) throws SQLException {
+>>>>>>> ceb12419d611a5f985f89a588c802fe945e0e9ab
         return new Booking(
                 rs.getInt("BookingID"),
                 rs.getInt("GuestID"),
                 rs.getInt("RoomID"),
+<<<<<<< HEAD
                 rs.getObject("CheckInDate", LocalDate.class),
                 rs.getObject("CheckOutDate", LocalDate.class),
                 rs.getObject("BookingDate", LocalDate.class),
@@ -113,3 +137,44 @@ public class BookingDAO extends BaseDAO<Booking> {
         return update(sql, bookingId) > 0;
     }
 }
+=======
+                rs.getDate("CheckInDate").toLocalDate(),
+                rs.getDate("CheckOutDate").toLocalDate(),
+                rs.getDate("BookingDate").toLocalDate(),
+                BookingStatus.fromDbValue(rs.getString("Status")),
+                rs.getInt("TotalGuests"),
+                rs.getString("SpecialRequests") != null ? rs.getString("SpecialRequests") : "",
+                PaymentStatus.fromDbValue(rs.getString("PaymentStatus")),
+                rs.getDate("CancellationDate") != null ? rs.getDate("CancellationDate").toLocalDate() : null,
+                rs.getString("CancellationReason") != null ? rs.getString("CancellationReason") : ""
+        );
+    }
+
+    public List<Booking> findAll() {
+        return query("SELECT\n" +
+                "B.BookingID, B.GuestID, B.RoomID,\n" +
+                "B.CheckInDate, B.CheckOutDate, B.BookingDate, B.Status,\n" +
+                "B.TotalGuests, B.SpecialRequests, B.PaymentStatus, B.CancellationDate,\n" +
+                "B.CancellationReason FROM BOOKING B");
+    }
+
+    public Optional<Booking> findById(int id) {
+        List<Booking> bookings = query("SELECT\n" +
+                "B.BookingID, B.GuestID, B.RoomID,\n" +
+                "B.CheckInDate, B.CheckOutDate, B.BookingDate, B.Status,\n" +
+                "B.TotalGuests, B.SpecialRequests, B.PaymentStatus, B.CancellationDate,\n" +
+                "B.CancellationReason FROM BOOKING B\n" +
+                "WHERE B.BookingID = ?", id);
+        return bookings.stream().findFirst();
+    }
+
+    public List<Booking> findByStatus(BookingStatus status) {
+        return query("SELECT\n" +
+                "B.BookingID, B.GuestID, B.RoomID,\n" +
+                "B.CheckInDate, B.CheckOutDate, B.BookingDate, B.Status,\n" +
+                "B.TotalGuests, B.SpecialRequests, B.PaymentStatus, B.CancellationDate,\n" +
+                "B.CancellationReason FROM BOOKING B\n" +
+                "WHERE B.Status = ?", status.getDbValue());
+    }
+}
+>>>>>>> ceb12419d611a5f985f89a588c802fe945e0e9ab
