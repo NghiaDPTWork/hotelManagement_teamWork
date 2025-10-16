@@ -6,7 +6,6 @@ import edu.hotel_management.application.service.ServiceEntityService;
 import edu.hotel_management.domain.dto.booking.BookingDetailViewModel;
 import edu.hotel_management.domain.dto.booking_service.BookingServiceCreateModel;
 import edu.hotel_management.domain.dto.booking_service.BookingServiceUsageDetailViewModel;
-import edu.hotel_management.domain.dto.booking_service.BookingServiceViewModel;
 import edu.hotel_management.domain.dto.service.ServiceViewModel;
 import edu.hotel_management.infrastructure.persistence.dao.*;
 import edu.hotel_management.infrastructure.persistence.provider.DataSourceProvider;
@@ -14,7 +13,6 @@ import edu.hotel_management.presentation.constants.Page;
 import edu.hotel_management.presentation.constants.RequestAttribute;
 import edu.hotel_management.presentation.constants.SessionAttribute;
 import edu.hotel_management.presentation.dto.staff.StaffPresentationModel;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -30,7 +28,7 @@ import java.util.List;
  *
  * @author thuannd.dev
  */
-@WebServlet(name = "AddServiceController", urlPatterns = {"/service-staff/add-service"})
+@WebServlet(name = "AddServiceController", urlPatterns = {"/service-staff/services"})
 public class AddServiceController extends HttpServlet {
 
     private static final long serialVersionUID = 1L;

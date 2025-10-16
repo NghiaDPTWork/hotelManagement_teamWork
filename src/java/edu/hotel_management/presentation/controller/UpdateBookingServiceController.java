@@ -17,7 +17,7 @@ import javax.sql.DataSource;
  *
  * @author thuannd.dev
  */
-@WebServlet(name = "UpdateBookingServiceController", urlPatterns = {"/service-staff/update-booking-service-status"})
+@WebServlet(name = "UpdateBookingServiceController", urlPatterns = {"/service-staff/booking-services/status"})
 public class UpdateBookingServiceController extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private BookingServiceUsageService bookingServiceUsageService;
